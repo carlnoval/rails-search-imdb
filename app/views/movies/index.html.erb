@@ -1,6 +1,22 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-sm-8">
+
+      <%# This search will  %>
+
+      <%# can also be done with simple form (sf) but sf is usually tied to a model but if you passed an imput that is not directly related to the model the sf will throw an error %>
+      <%# due to above, form tag is a simpler type of form without restrictions %>
+      <%= form_tag movies_path, method: :get, class: "d-flex mt-5 mb-3" do %>
+        <%# text field tag is a f.input default on rails %>
+        <%= text_field_tag :query,
+          # query will be in params, it will contain what was typed in the search field
+          params[:query],
+          class: "form-control flex-grow",
+          placeholder: "Find a movie"
+        %>
+        <%= submit_tag "Search", class: "btn btn-primary" %>
+      <% end %>
+
       <div id="movies">
         <% @movies.each do |movie| %>
           <h4><%= movie.title %></h4>
