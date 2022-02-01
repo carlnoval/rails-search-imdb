@@ -3,6 +3,8 @@ class MoviesController < ApplicationController
   def index
     if params[:query].present?
 
+      # --- PLAIN active record search ---
+
       # only returns movie title with case sensitive exact match
       # @movies = Movie.where(title: params[:query])
 
@@ -22,15 +24,30 @@ class MoviesController < ApplicationController
       # Search NOTE: this won't be able to search via movie directors, `nolan` won't yeild any results
       # @movies = Movie.where("title @@ :query OR synopsis @@ :query", query: "%#{params[:query]}%")
 
-      # this setup allows to search for movie directors
+      # this setup allows to search for movie directors, `nolan` now returns 3 results
       # unsure about the `\` character, could be just for convention but may also break something if removed
-      sql_query = " \
-        movies.title @@ :query \
-        OR movies.synopsis @@ :query \
-        OR directors.first_name @@ :query \
-        OR directors.last_name @@ :query \
-      "
-      @movies = Movie.joins(:director).where(sql_query, query: "%#{params[:query]}%")
+      # sql_query = " \
+      #   movies.title @@ :query \
+      #   OR movies.synopsis @@ :query \
+      #   OR directors.first_name @@ :query \
+      #   OR directors.last_name @@ :query \
+      # "
+      # @movies = Movie.joins(:director).where(sql_query, query: "%#{params[:query]}%")
+
+      # --- PLAIN active record search ---
+
+      # --- PG Search Gem ---
+      # does everything on your computer in the folder of the app, ElasticSearch does not doe this cause they have their own server
+      # PG Search documentation: https://github.com/Casecommons/pg_search
+
+      # NOTE: see search configuration on the model
+
+      # w/o association
+      # search_by_title_and_synopsis is a method from the movie controller
+      # @movies = Movie.search_by_title_and_synopsis(params[:query])
+
+      # w/ association
+      @movies = Movie.global_search(params[:query])
     else
       @movies = Movie.order(title: :asc)
     end
