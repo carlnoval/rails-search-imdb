@@ -56,8 +56,8 @@ class Movie < ApplicationRecord
   multisearchable against: [:title, :synopsis]
 
   # Step3: Execute the following commands to add existing movie and tv_show data in `pg_search_documents`
-  # PgSearch::Multisearch.rebuild(Movie)  - adds all information about the movie into `pg_search_documents` via INSERT INTO
-  # PgSearch::Multisearch.rebuild(TvShow) - adds all information about the tv_show into `pg_search_documents` via INSERT INTO
+  # PgSearch::Multisearch.rebuild(Movie)  - adds all information about the movies into `pg_search_documents` via INSERT INTO
+  # PgSearch::Multisearch.rebuild(TvShow) - adds all information about the tv_shows into `pg_search_documents` via INSERT INTO
   # NOTE: only have to execute previous 2 lines once
   # NOTE: newly create movie/tv_shows will automatically get added into `pg_search_documents`
 
